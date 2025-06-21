@@ -30,29 +30,19 @@ ez::Drive chassis(
  * to keep execution time for this mode under a few seconds.
  */
 
-#define MOTOR_PORT 1
-bool is_intake_on = false;
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
 
 
-
-
-void lift_task() {
-  pros::delay(2000); 
-  while (true) {
-    set_lift(liftPID.compute(lift_encoder.get_position()));
-
-    pros::delay(ez::util::DELAY_TIME);
-  }
-}
-pros::Task Lift_Task(lift_task);
 void initialize() {
 
   // Print our branding over your terminal :D
   //ez::ez_template_print();
   lift_encoder.reset_position();
-  liftPID.exit_condition_set(80, 50, 300, 150, 500, 500);
+  liftPID.exit_condition_set(150, 1, 300, 2, 3500, 3500);
+  //void exit_condition_set(int p_small_exit_time, double p_small_error, 
+  //int p_big_exit_time = 0, double p_big_error = 0, int p_velocity_exit_time = 0, int p_mA_timeout = 0);
+
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
@@ -65,7 +55,7 @@ void initialize() {
   // chassis.odom_tracker_left_set(&vert_tracker);
 
   // Configure your chassis controls
-  chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
+  chassis.opcontrol_curve_buttons_toggle(false);   // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
   chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
@@ -99,6 +89,23 @@ void initialize() {
   ez::as::initialize();
   master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
+
+void lift_task() {
+  pros::delay(2000); 
+  while (true) {
+    if (lift_toggled) {
+      while (liftPID.exit_condition(true) == ez::RUNNING) {
+       set_lift(liftPID.compute(lift_encoder.get_position()/100.0));
+       pros::delay(ez::util::DELAY_TIME);
+      }
+      motor_lift.brake();
+      lift_toggled = false;
+    }
+    pros::delay(ez::util::DELAY_TIME);
+  }
+}
+pros::Task Lift_Task(lift_task);
+
 
 /**
  * Runs while the robot is in the disabled state of Field Management System or
@@ -192,6 +199,9 @@ void screen_print_tracker(ez::tracking_wheel *tracker, std::string name, int lin
 void ez_screen_task() {
   while (true) {
     // Only run this when not connected to a competition switch
+    if (ez::as::page_blank_is_on(1)) {
+      ez::screen_print(std::to_string(lift_encoder.get_position()/100.0)+ "\n" + std::to_string(liftPID.compute(lift_encoder.get_position()/100.0)), 1);
+    }
     if (!pros::competition::is_connected()) {
       // Blank page for odom debugging
       if (chassis.odom_enabled() && !chassis.pid_tuner_enabled()) {
@@ -290,10 +300,12 @@ void opcontrol() {
     ez_template_extras();
     chassis.opcontrol_arcade_standard(ez::SPLIT);
     if (master.get_digital(DIGITAL_UP)) {
-      liftPID.target_set(500);
+      liftPID.target_set(50);
+      lift_toggled = true;
     }
     else if (master.get_digital(DIGITAL_DOWN)) {
       liftPID.target_set(0);
+      lift_toggled = true;
     }
 
     pros::delay(ez::util::DELAY_TIME);
