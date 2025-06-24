@@ -11,7 +11,7 @@ ez::Drive chassis(
     {-1, -2, -3},     // Left Chassis Ports (negative port will reverse it!)
     {4, 5, 6},  // Right Chassis Ports (negative port will reverse it!)
 
-    7,      // IMU Port
+    14,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
@@ -39,7 +39,7 @@ void initialize() {
   // Print our branding over your terminal :D
   //ez::ez_template_print();
   lift_encoder.reset_position();
-  liftPID.exit_condition_set(150, 1, 300, 2, 3500, 3500);
+  liftPID.exit_condition_set(150, 1, 300, 2, 1000, 1200);
   //void exit_condition_set(int p_small_exit_time, double p_small_error, 
   //int p_big_exit_time = 0, double p_big_error = 0, int p_velocity_exit_time = 0, int p_mA_timeout = 0);
 
@@ -56,8 +56,8 @@ void initialize() {
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(false);   // Enables modifying the controller curve with buttons on the joysticks
-  chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
-  chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
+  chassis.opcontrol_drive_activebrake_set(0.8);   // Sets the active brake kP. We recommend ~2.  0 will disable.
+  chassis.opcontrol_curve_default_set(4.0, 3.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
   // Set the drive to your own constants from autons.cpp!
   default_constants();
@@ -98,6 +98,7 @@ void lift_task() {
        set_lift(liftPID.compute(lift_encoder.get_position()/100.0));
        pros::delay(ez::util::DELAY_TIME);
       }
+      motor_lift.set_brake_mode(MOTOR_BRAKE_HOLD);
       motor_lift.brake();
       lift_toggled = false;
     }
@@ -116,18 +117,7 @@ void disabled() {
   // . . .
 }
 
-void intake_spin(int speed)
-{
-  static bool intake_toggle = false;
-  if(!intake_toggle){
-   motor_intake.move(speed);
-   intake_toggle = true;
-  }
-  else{
-    motor_intake.brake();
-    intake_toggle = false;
-  }
-}
+
 
 
 /**
@@ -260,12 +250,7 @@ void ez_template_extras() {
       chassis.drive_brake_set(preference);
     }
 
-    if (master.get_digital_new_press(DIGITAL_R1)) {
-      intake_spin(100);
-    }
-    if (master.get_digital_new_press(DIGITAL_R2)) {
-      intake_spin(-100);
-    }
+
 
     // Allow PID Tuner to iterate
     chassis.pid_tuner_iterate();
@@ -277,6 +262,7 @@ void ez_template_extras() {
       chassis.pid_tuner_disable();
   }
 }
+
 
 /**
  * Runs the operator control code. This function will be started in its own task
@@ -291,21 +277,48 @@ void ez_template_extras() {
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
+void set_lift_constants(int target) {
+  if (target > lift_encoder.get_position()/100.0) {
+    liftPID.constants_set(8, 0.2, 0, 4);
+  }
+  else
+  {
+    liftPID.constants_set(3, 0.2, 0, 4);
+  }
+}
+
 void opcontrol() {
+
   // This is preference to what you like to drive on
   chassis.drive_brake_set(MOTOR_BRAKE_COAST);
-  //motor.move_absolute(50000,-40);9l
+
   while (true) {
-    // Gives you some extras to make EZ-Template ezier
     ez_template_extras();
     chassis.opcontrol_arcade_standard(ez::SPLIT);
-    if (master.get_digital(DIGITAL_UP)) {
+
+    // controller buttons
+    if (master.get_digital_new_press(DIGITAL_L1)) {
+      set_lift_constants(50);
       liftPID.target_set(50);
       lift_toggled = true;
+    } 
+    else if (master.get_digital_new_press(DIGITAL_L2)) {
+      set_lift_constants(25);
+      liftPID.target_set(25);
+      lift_toggled = true;
     }
-    else if (master.get_digital(DIGITAL_DOWN)) {
+    else if (master.get_digital_new_press(DIGITAL_UP)) {
+      set_lift_constants(0);
       liftPID.target_set(0);
       lift_toggled = true;
+    }
+
+    if (master.get_digital_new_press(DIGITAL_R1)) {
+      intake_spin(100);
+    }
+    if (master.get_digital_new_press(DIGITAL_R2)) {
+      intake_spin(-100);
     }
 
     pros::delay(ez::util::DELAY_TIME);
