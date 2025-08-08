@@ -48,6 +48,30 @@ void default_constants() {
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
 
+
+
+/// ########################### AUTON RED RIGHT ################################
+
+///
+void red_right_auton() {
+  intake_spin(127);
+  chassis.pid_odom_set({{{3.5_in, 11.5_in}, fwd, DRIVE_SPEED},
+                        {{8_in, 19_in}, fwd, 80},
+                        {{16.5_in, 24_in}, fwd, 60},
+                        {{27_in, 28_in}, fwd, 80},
+                        {{35_in, 40_in}, fwd, 40}},// was 36, 36
+                        //16 24
+                       true);
+  chassis.pid_wait_until_index(0); 
+
+
+    // Set your intake to start moving once it passes through the second point in the index
+  chassis.pid_wait();
+  // Intake.move(0);  // Turn the intake off
+}
+
+
+
 ///
 // Drive Example
 ///

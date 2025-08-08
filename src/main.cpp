@@ -21,7 +21,7 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 // ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel vert_tracker(11, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -39,7 +39,7 @@ void initialize() {
   // Print our branding over your terminal :D
   //ez::ez_template_print();
   lift_encoder.reset_position();
-  liftPID.exit_condition_set(150, 1, 300, 2, 1000, 1200);
+  liftPID.exit_condition_set(250, 1, 500, 2, 1000, 1200);
   //void exit_condition_set(int p_small_exit_time, double p_small_error, 
   //int p_big_exit_time = 0, double p_big_error = 0, int p_velocity_exit_time = 0, int p_mA_timeout = 0);
 
@@ -52,11 +52,11 @@ void initialize() {
   // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
   //  - change `left` to `right` if the tracking wheel is to the right of the centerline
   //  - ignore this if you aren't using a vertical tracker
-  // chassis.odom_tracker_left_set(&vert_tracker);
+  chassis.odom_tracker_left_set(&vert_tracker);
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(false);   // Enables modifying the controller curve with buttons on the joysticks
-  chassis.opcontrol_drive_activebrake_set(0.8);   // Sets the active brake kP. We recommend ~2.  0 will disable.
+  chassis.opcontrol_drive_activebrake_set(0.2);   // Sets the active brake kP. We recommend ~2.  0 will disable.
   chassis.opcontrol_curve_default_set(4.0, 3.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
   // Set the drive to your own constants from autons.cpp!
@@ -68,6 +68,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"red right", red_right_auton},
       {"Drive\n\nDrive forward and come back", drive_example},
       {"Turn\n\nTurn 3 times.", turn_example},
       {"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
@@ -244,6 +245,7 @@ void ez_template_extras() {
       chassis.pid_tuner_toggle();
 
     // Trigger the selected autonomous routine
+    
     if (master.get_digital(DIGITAL_B) && master.get_digital(DIGITAL_DOWN)) {
       pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
       autonomous();
@@ -280,11 +282,11 @@ void ez_template_extras() {
 
 void set_lift_constants(int target) {
   if (target > lift_encoder.get_position()/100.0) {
-    liftPID.constants_set(8, 0.2, 0, 4);
+    liftPID.constants_set(9, 0.2, 0, 6);
   }
   else
   {
-    liftPID.constants_set(3, 0.2, 0, 4);
+    liftPID.constants_set(3, 0.2, 0, 6);
   }
 }
 
@@ -299,26 +301,33 @@ void opcontrol() {
 
     // controller buttons
     if (master.get_digital_new_press(DIGITAL_L1)) {
-      set_lift_constants(50);
-      liftPID.target_set(50);
+      set_lift_constants(90);
+      liftPID.target_set(90);
+      chassis.opcontrol_speed_max_set(50);
+
       lift_toggled = true;
     } 
     else if (master.get_digital_new_press(DIGITAL_L2)) {
-      set_lift_constants(25);
-      liftPID.target_set(25);
+      set_lift_constants(54);
+      liftPID.target_set(54);
+      chassis.opcontrol_speed_max_set(80);
       lift_toggled = true;
     }
-    else if (master.get_digital_new_press(DIGITAL_UP)) {
+    else if (master.get_digital_new_press(DIGITAL_RIGHT)) {
       set_lift_constants(0);
       liftPID.target_set(0);
+      chassis.opcontrol_speed_max_set(127);
       lift_toggled = true;
     }
 
     if (master.get_digital_new_press(DIGITAL_R1)) {
-      intake_spin(100);
+      intake_spin(127);
     }
     if (master.get_digital_new_press(DIGITAL_R2)) {
-      intake_spin(-100);
+      intake_spin(-127);
+    }
+    if (master.get_digital_new_press(DIGITAL_Y)) {
+      loader_toggle();
     }
 
     pros::delay(ez::util::DELAY_TIME);
