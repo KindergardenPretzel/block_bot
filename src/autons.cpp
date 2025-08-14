@@ -55,19 +55,38 @@ void default_constants() {
 ///
 void red_right_auton() {
   intake_spin(127);
-  chassis.pid_odom_set({{{3.5_in, 11.5_in}, fwd, DRIVE_SPEED},
-                        {{8_in, 19_in}, fwd, 80},
+  chassis.pid_odom_set({{{3.5_in, 11.5_in}, fwd, 80},
+                        {{8_in, 19_in}, fwd, 70},
                         {{16.5_in, 24_in}, fwd, 60},
-                        {{27_in, 28_in}, fwd, 80},
-                        {{35_in, 40_in}, fwd, 40}},// was 36, 36
+                        {{24_in, 30.5_in}, fwd, 70},
+                        {{30_in, 35.5_in}, fwd, 70},
+                        {{32_in, 37.5_in}, fwd, 50},},
+                     //{35_in, 40_in}, fwd, 40}// was 36, 36
                         //16 24
-                       true);
-  chassis.pid_wait_until_index(0); 
+                       true); 
+  //chassis.pid_wait_until_index(0); 
 
 
     // Set your intake to start moving once it passes through the second point in the index
   chassis.pid_wait();
-  // Intake.move(0);  // Turn the intake off
+pros::delay(300);
+  chassis.pid_swing_set(ez::RIGHT_SWING, 27_deg, 45, 10);
+  chassis.pid_wait();
+pros::delay(300);
+
+
+
+  chassis.pid_odom_set({{{31_in, 34.5_in}, rev, DRIVE_SPEED},
+                        {{28_in, 26_in}, rev, DRIVE_SPEED},
+                        {{31_in, 14.5_in}, rev,  DRIVE_SPEED},
+                        {{35_in, 10_in}, rev,DRIVE_SPEED},
+                        {{39_in, 4_in, 0_deg}, rev,DRIVE_SPEED},},
+                       true); 
+  
+  chassis.pid_wait_until_index(2); 
+  intake_spin(0);
+                       
+  chassis.pid_wait();
 }
 
 
