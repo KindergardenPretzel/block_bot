@@ -62,8 +62,7 @@ void red_right_auton() {
                         {{30_in, 35.5_in}, fwd, 50},
                         {{32_in, 37.5_in}, fwd, 40},},
                        true); 
-  //chassis.pid_wait_until_index(4); 
-  //pros::delay(200);
+
 
 
     // Set your intake to start moving once it passes through the second point in the index
@@ -78,7 +77,7 @@ void red_right_auton() {
   chassis.pid_odom_set({{{31_in, 34.5_in}, rev, DRIVE_SPEED},
                         {{28_in, 26_in}, rev, DRIVE_SPEED},
                         {{31_in, 14.5_in}, rev,  DRIVE_SPEED},
-                        {{42.5_in, 10_in}, rev,DRIVE_SPEED},},
+                        {{43_in, 10_in}, rev,DRIVE_SPEED},},
                        true); 
   chassis.pid_wait_until_index(2); 
   liftPID.target_set(90);
@@ -91,9 +90,26 @@ void red_right_auton() {
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_odom_set(10.5_in, 60, true);
+  chassis.pid_odom_set(11_in, 45, true);
   chassis.pid_wait();
   intake_spin(-127);
+  pros::delay(3000);
+   chassis.pid_odom_set({{{42_in, 14_in}, rev, DRIVE_SPEED},
+                         {{42_in, 10_in}, rev, DRIVE_SPEED},
+                         {{42_in, 0_in}, rev, DRIVE_SPEED},},
+
+                       true);
+  chassis.pid_wait_until_index(0); 
+  liftPID.target_set(0);
+  lift_toggled = true;
+  loader_toggle();
+  chassis.pid_wait();
+  
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+
+  chassis.pid_wait();
+  chassis.pid_odom_set(12_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
 
 }
 
