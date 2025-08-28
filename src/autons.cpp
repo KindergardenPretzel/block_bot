@@ -112,7 +112,7 @@ void red_right_auton() {
                         true);
 
   chassis.pid_wait();
-    chassis.pid_odom_set(11_in, 45, true);
+    chassis.pid_odom_set(12_in, 45, true);
   chassis.pid_wait();
   intake_spin(-127);
   pros::delay(3000);
