@@ -283,6 +283,7 @@ void ez_template_extras() {
 void set_lift_constants(int target) {
   if (target > lift_encoder.get_position()/100.0) {
     liftPID.constants_set(9, 0.2, 0, 6);
+    //liftPID.constants_set(24, 0.2, 10, 6);
   }
   else
   {
