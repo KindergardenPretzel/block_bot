@@ -17,8 +17,10 @@ void default_constants() {
   // P, I, D, and Start I
   chassis.pid_drive_constants_set(20.0, 0.0, 100.0);         // Fwd/rev constants, used for odom and non odom motions
   chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(3.0, 0.05, 20.0, 15.0);     // Turn in place constants
-  chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
+//  chassis.pid_turn_constants_set(3.0, 0.05, 20.0, 15.0);     // Turn in place constants
+  chassis.pid_turn_constants_set(4.4, 0.04, 30.25, 15.0);     // Turn in place constants
+
+chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
   chassis.pid_odom_angular_constants_set(6.5, 0.0, 52.5);    // Angular control for odom motions
   chassis.pid_odom_boomerang_constants_set(5.8, 0.0, 32.5);  // Angular control for boomerang motions
 
@@ -51,10 +53,10 @@ void default_constants() {
 
 
 
-/// ########################### AUTON RED RIGHT ################################
+/// ########################### AUTON BASE ################################
 
 ///
-void red_right_auton() {
+void base() {
   intake_spin(127);
   chassis.pid_odom_set({{{3.5_in, 11.5_in}, fwd, 80},
                         {{8_in, 19_in}, fwd, 70},
@@ -70,7 +72,7 @@ void red_right_auton() {
   chassis.pid_wait();
 
   pros::delay(300);
-  chassis.pid_swing_set(ez::RIGHT_SWING, 27_deg, 45, 10);
+  chassis.pid_swing_set(ez::RIGHT_SWING, 27_deg, 45, 5);
   chassis.pid_wait();
   pros::delay(250);
 
@@ -94,10 +96,13 @@ void red_right_auton() {
   loader_toggle();
   intake_spin(127);
   
-  chassis.pid_odom_set(12_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(13_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   
-  pros::delay(2000);
+  chassis.pid_odom_set(-0.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  pros::delay(650);
   intake_spin(0);
   //double x = chassis.odom_x_get();
   //double y = chassis.odom_x_get();
@@ -112,27 +117,137 @@ void red_right_auton() {
   
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
-/*
+
   liftPID.target_set(90);
   //chassis.pid_speed_max_set(60);
   lift_toggled = true;
-  */
-  /*
+  pros::delay(100);
+
   chassis.pid_odom_set({
-                        {{42_in, 6_in}, fwd, DRIVE_SPEED},
-                        {{42_in, 8_in}, fwd,  DRIVE_SPEED},
-                        {{42_in, 10_in}, fwd, DRIVE_SPEED},},
+                        {{42.5_in, 6_in, 0_deg}, fwd, 60},
+                        {{42.5_in, 8_in, 0_deg}, fwd,  60},
+                        {{42.5_in, 10_in, 0_deg}, fwd, 60},},
                         true);
 
   chassis.pid_wait();
-  chassis.pid_odom_set(12_in, 45, true);
+  chassis.pid_odom_set({
+                        {{42.5_in, 21.3_in, 0_deg}, fwd, 45},}, true);
   chassis.pid_wait();
   intake_spin(-127);
-  pros::delay(3000);
-  */
+  pros::delay(2000);
+  
 }
 
+
+
+void left_base() {
+  intake_spin(127);
+  chassis.pid_odom_set({{{3.5_in, 11.5_in}, fwd, 80},
+                        {{8_in, 19_in}, fwd, 70},
+                        {{16.5_in, 24_in}, fwd, 60},
+                        {{24_in, 30.5_in}, fwd, 70},
+                        {{30_in, 35.5_in}, fwd, 50},
+                        {{32_in, 35.5_in}, fwd, 40},},
+                       true); 
+
+
+
+    // Set your intake to start moving once it passes through the second point in the index
+  chassis.pid_wait();
+
+  pros::delay(300);
+  chassis.pid_swing_set(ez::RIGHT_SWING, 27_deg, 45, 5);
+  chassis.pid_wait();
+  pros::delay(250);
+
+
+
+  chassis.pid_odom_set({{{31_in, 34.5_in}, rev, DRIVE_SPEED},
+                        {{28_in, 26_in}, rev, DRIVE_SPEED},
+                        {{31_in, 14.5_in}, rev,  DRIVE_SPEED},
+                        {{41.5_in, 0_in}, rev,DRIVE_SPEED},},
+                       true); 
+  chassis.pid_wait_until_index(2); 
+  intake_spin(0);
+
+  chassis.pid_wait();
+  
+  
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  
+  
+  loader_toggle();
+  intake_spin(127);
+  
+  chassis.pid_odom_set(13_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  
+  chassis.pid_odom_set(-0.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  pros::delay(650);
+  intake_spin(0);
+  //double x = chassis.odom_x_get();
+  //double y = chassis.odom_x_get();
+  //chassis.pid_odom_set({x, y}, DRIVE_SPEED, true);
+
+  chassis.pid_odom_set(-12_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  intake_spin(127);
+  pros::delay(300);
+  intake_spin(0);
+  loader_toggle();
+  
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  liftPID.target_set(90);
+  //chassis.pid_speed_max_set(60);
+  lift_toggled = true;
+  pros::delay(100);
+
+  chassis.pid_odom_set({
+                        {{40.5_in, 6_in, 0_deg}, fwd, 60},
+                        {{40.5_in, 8_in, 0_deg}, fwd,  60},
+                        {{40.5_in, 10_in, 0_deg}, fwd, 60},},
+                        true);
+
+  chassis.pid_wait();
+  chassis.pid_odom_set({
+                        {{40.5_in, 21.3_in, 0_deg}, fwd, 45},}, true);
+  chassis.pid_wait();
+  intake_spin(-127);
+  pros::delay(2000);
+}
+
+
 /// ########################### AUTON RED RIGHT ################################
+void red_right_auton() {
+  base();
+}
+
+/// ########################### AUTON RED LEFT ################################
+void red_left_auton() {
+  chassis.odom_x_flip();
+  chassis.odom_theta_flip();
+  left_base();
+}
+
+/// ########################### AUTON BLUE RIGHT ################################
+void blue_right_auton() {
+  base();
+}
+
+
+/// ########################### AUTON RED LEFT ################################
+void blue_left_auton() {
+  chassis.odom_x_flip();
+  chassis.odom_theta_flip();
+  left_base();
+}
+
+/// ########################### AUTON RED RIGHT OLD ################################
 
 ///
 void red_right_auton_old() {
