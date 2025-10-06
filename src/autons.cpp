@@ -96,7 +96,7 @@ void base() {
 // old  loader_toggle();
   intake_spin(127);
   
-  chassis.pid_odom_set(13_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(13_in, 80, true);
   chassis.pid_wait();
   
   // wait for balls and stop the intake
@@ -325,8 +325,35 @@ void red_right_auton_old() {
 
 
 void skills() {
-
- 
+    //Start
+    chassis.odom_xyt_set(0_in, 0_in, 90_deg);
+    chassis.pid_wait();
+    //drive to loader tile
+    chassis.pid_odom_set(30_in, DRIVE_SPEED, true);
+    chassis.pid_wait();
+    //Turn to loader
+    chassis.pid_turn_set(180_deg, TURN_SPEED);
+    chassis.pid_wait();
+    //lower loader and spin intake
+    loader_toggle();
+    intake_spin(127);
+    pros::delay(200);
+    //Approach loader
+    chassis.pid_odom_set(7.5_in, DRIVE_SPEED, true);
+    chassis.pid_wait();
+    //Intake blocks
+    pros::delay(3000);
+    intake_spin(0);
+    //Drive away from loader
+    chassis.pid_odom_set(-13_in, DRIVE_SPEED, true);    
+    chassis.pid_wait();
+    //up loader
+    loader_toggle();
+    pros::delay(200);
+    //Turn to long goal
+    chassis.pid_turn_set(0_deg, TURN_SPEED);
+    chassis.pid_wait();
+    
 }
 
 
