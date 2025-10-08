@@ -353,7 +353,45 @@ void skills() {
     //Turn to long goal
     chassis.pid_turn_set(0_deg, TURN_SPEED);
     chassis.pid_wait();
-    
+
+
+    //Raise lift
+     liftPID.target_set(90);
+     lift_toggled = true;
+     pros::delay(200);
+    //Go to long goal
+     chassis.pid_odom_set({
+                          {{30.5_in, 12_in, 0_deg}, fwd, 60},
+                         {{30.5_in, 16_in, 0_deg}, fwd,  60},
+                          {{30.5_in, 25.7_in, 0_deg}, fwd, 60},},
+                          true);
+  //Score long goal
+  chassis.pid_wait();
+  intake_spin(-127);
+  //Stop intake
+  pros::delay(2000);
+    intake_spin(0);
+  //Drive away from long goal
+  chassis.pid_odom_set(-13_in, 60, true); 
+  chassis.pid_wait();
+  //Lower lift
+  liftPID.target_set(0);
+  lift_toggled = true;
+  //Turn to middle blocks
+  chassis.pid_turn_set(300_deg, TURN_SPEED);
+  chassis.pid_wait();
+  //Intake middle blocks
+    intake_spin(127);
+  //Drive to lower center goal
+    chassis.pid_odom_set({
+                        {{12.3_in, 26_in}, fwd, 60},
+                       // {{0.5_in, 16_in}, fwd,  60},
+                        {{-0.9_in, 36.5_in}, fwd, 60},},
+                        true);
+  //Score lower center goal
+  chassis.pid_wait();
+  intake_spin(0);
+  intake_spin(-100);
 }
 
 
