@@ -68,11 +68,12 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"red right", red_right_auton},
+       {"skills", skills},  
+    {"red right", red_right_auton},
       {"red left", red_left_auton},
       {"blue right", blue_right_auton},
       {"blue left", blue_left_auton},            
-       {"skills", skills},  
+
       //{"Drive\n\nDrive forward and come back", drive_example},
       //{"Turn\n\nTurn 3 times.", turn_example},
       //{"Drive and Turn\n\nDrive forward, turn, come back", drive_and_turn},
