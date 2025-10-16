@@ -5,6 +5,7 @@ void default_constants();
 void base();
 void left_base();
 void skills();
+void skills2();
 void red_right_auton();
 void red_left_auton();
 void blue_left_auton();
