@@ -21,7 +21,8 @@ ez::Drive chassis(
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
 // ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-ez::tracking_wheel vert_tracker(11, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
+//ez::tracking_wheel vert_tracker(11, 2, 0.0);   // This tracking wheel is parallel to the drive wheels
+ez::tracking_wheel vert_tracker(11, 2, -0.29);  
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
