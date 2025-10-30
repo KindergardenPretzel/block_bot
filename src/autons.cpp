@@ -103,15 +103,15 @@ void base(bool right=1) {
 // old  loader_toggle();
   intake_spin(127);
   
-  chassis.pid_odom_set(13_in, 80, true);
+  chassis.pid_odom_set(13_in, 60, true);
   chassis.pid_wait();
   
   // wait for balls and stop the intake
-  pros::delay(650);
+  pros::delay(550);
   intake_spin(0);
 
   // drive backwards and get rid of balls that can block loader tool 
-  chassis.pid_odom_set(-12_in, DRIVE_SPEED, true);
+  chassis.pid_odom_set(-7_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
   loader_toggle();
@@ -136,15 +136,17 @@ void base(bool right=1) {
 
   //drive to the goal
   chassis.pid_odom_set({
-                        {{40_in, 6_in, 0_deg}, fwd, 60},
-                        {{40_in, 8_in, 0_deg}, fwd,  60},
-                        {{40_in, 10_in, 0_deg}, fwd, 60},},
+                        {{40.9_in, 10_in}, fwd, 60},
+                       // {{40_in, 8_in, 0_deg}, fwd,  60},
+                        {{40.9_in, 16_in}, fwd, 60},
+                         {{40.9_in, 21.7_in}, fwd, 60}
+                      },
                         true);
 
   chassis.pid_wait();
-  chassis.pid_odom_set({
-                        {{40_in, 21.7_in, 0_deg}, fwd, 45},}, true);
-  chassis.pid_wait();
+  //chassis.pid_odom_set({
+  //                      {{40_in, 21.7_in, 0_deg}, fwd, 45},}, true);
+  //chassis.pid_wait();
   
   //score!
   intake_spin(-127);
@@ -198,7 +200,7 @@ void skills() {
     intake_spin(127);
     pros::delay(200);
     //Approach loader
-    chassis.pid_odom_set(8_in, 70, true);
+    chassis.pid_odom_set(9_in, 70, true);
     chassis.pid_wait();
     //Intake blocks
     pros::delay(1700);
@@ -229,7 +231,7 @@ void skills() {
   chassis.pid_wait();
 
   chassis.pid_odom_set({
-                        {{-64_in, 25_in}, fwd, 60},},true);  
+                        {{-63.8_in, 24_in}, fwd, 60},},true);  
   chassis.pid_wait();
 
     intake_spin(-127);
@@ -309,7 +311,7 @@ void skills() {
                         {{-52_in, 50_in}, fwd, DRIVE_SPEED},
                         {{-52_in, 60_in}, fwd, DRIVE_SPEED},
                         {{-58_in, 80_in}, fwd, DRIVE_SPEED},
-                        {{-69_in, 91_in}, fwd, DRIVE_SPEED},
+                        {{-68.5_in, 91_in}, fwd, DRIVE_SPEED},
                       },false);
     chassis.pid_wait_until_index(5);
     loader_toggle();
@@ -319,7 +321,7 @@ void skills() {
     chassis.pid_turn_set(0_deg, TURN_SPEED);
     chassis.pid_wait();
     //Approach loader
-    chassis.pid_odom_set(14_in, 95, true);
+    chassis.pid_odom_set(15.5_in, 95, true);
     chassis.pid_wait();
     //Intake blocks
     pros::delay(1700);
@@ -373,7 +375,7 @@ void skills() {
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 
-      chassis.pid_odom_set(14_in, 95, true);
+      chassis.pid_odom_set(14.5_in, 95, true);
     chassis.pid_wait();
     //Intake blocks
     pros::delay(1700);
@@ -387,9 +389,9 @@ void skills() {
   liftPID.target_set(90);
   lift_toggled = true;
 
-  chassis.pid_odom_set({{{27.5_in, 97_in}, fwd, 50},
-                        {{27.5_in, 82_in}, fwd, 50},
-                        {{27.5_in, 77_in}, fwd, 60},
+  chassis.pid_odom_set({{{28_in, 97_in}, fwd, 50},
+                        {{28_in, 82_in}, fwd, 50},
+                        {{28_in, 77_in}, fwd, 60},
                       },true);  
 
   chassis.pid_wait();
@@ -431,7 +433,7 @@ chassis.pid_wait();
 pros::delay(200);
 loader_toggle();
 
-chassis.pid_odom_set(17_in, 127, false);
+chassis.pid_odom_set(14_in, 127, false);
 chassis.pid_wait();
 pros::delay(200);
 loader_toggle();

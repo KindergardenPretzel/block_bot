@@ -8,6 +8,7 @@ extern Drive chassis;
 // intake
 inline pros::Motor motor_intake(-10, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 inline pros::ADIDigitalOut loader (1, LOW);
+inline pros::ADIDigitalOut descoringMech (2, LOW);
 
 inline void intake_spin(int speed)
 {
@@ -27,6 +28,7 @@ inline void loader_toggle()
   static bool load_toggle = false;
   if(!load_toggle){
    loader.set_value(HIGH);
+   
    load_toggle = true;
   }
   else{
@@ -52,4 +54,9 @@ inline void lift_wait() {
 }
 inline bool lift_toggled = false;
 
-
+inline void descore_on()
+{
+   descoringMech.set_value(HIGH);
+   liftPID.target_set(69);
+   lift_toggled = true;
+}
