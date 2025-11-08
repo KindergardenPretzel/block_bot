@@ -16,8 +16,8 @@ ez::Drive chassis(
     450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
 
-ez::tracking_wheel vert_tracker(11, 2, 0); 
-//ez::tracking_wheel horiz_tracker(20, 2, 0);
+ez::tracking_wheel vert_tracker(11, 2.75, 0);
+//ez::tracking_wheel horiz_tracker(20, 2, 5);
 
 
 pros::Controller master(pros::E_CONTROLLER_MASTER);
@@ -33,7 +33,7 @@ void initialize() {
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
   chassis.odom_tracker_left_set(&vert_tracker);
-//  chassis.odom_tracker_back_set(&horiz_tracker);
+  //chassis.odom_tracker_back_set(&horiz_tracker);
 
   // Configure your chassis controls
   chassis.opcontrol_curve_buttons_toggle(false);   // Enables modifying the controller curve with buttons on the joysticks
@@ -193,6 +193,7 @@ void ez_screen_task() {
         }
       }
     }
+
 
     // Remove all blank pages when connected to a comp switch
     else {
