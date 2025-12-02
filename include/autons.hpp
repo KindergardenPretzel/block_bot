@@ -10,6 +10,7 @@ void red_right_auton();
 void red_left_auton();
 void blue_left_auton();
 void blue_right_auton();
+void red_right_two_goal();
 
 void drive_example();
 void turn_example();

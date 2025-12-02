@@ -158,9 +158,34 @@ void base(bool right=1) {
   lift_toggled = true; 
 }
 
+
+void base_two_goal(bool right=1) {
+
+  //start intake and go for 3 balls and "under the goal" balls
+  intake_spin(127);
+  chassis.pid_odom_set({{{3.5_in, 11.5_in}, fwd, 80},
+                        {{8_in, 19_in}, fwd, 70},
+                        {{16.5_in, 24_in}, fwd, 60},//////this is the middle of the tile
+                        {{24_in, 30.5_in}, fwd, 70},
+                        {{30_in, 35.5_in}, fwd, 50},
+                        {{31_in, 36.5_in}, fwd, 40},},
+                       true); 
+                       
+  chassis.pid_wait();
+  pros::delay(300);
+  // take remaining under the goal
+  chassis.pid_swing_set(ez::RIGHT_SWING, 27_deg, 45, 5);
+  chassis.pid_wait();
+  pros::delay(250);
+  chassis.pid_odom_set({{{16.5_in, 24_in}, rev, 60},},
+                      true); 
+   
+}
+
 /// ########################### AUTON RED RIGHT ################################
 void red_right_auton() {
-  base(1);
+  //base(1);
+  base_two_goal(1);
 }
 
 /// ########################### AUTON RED LEFT ################################
@@ -176,11 +201,16 @@ void blue_right_auton() {
 }
 
 
-/// ########################### AUTON RED LEFT ################################
+/// ########################### AUTON BLUE LEFT ################################
 void blue_left_auton() {
   chassis.odom_x_flip();
   chassis.odom_theta_flip();
   base(0);
+}
+
+/// ########################### AUTON RED RIGHT TWO GOAL ################################
+void red_right_two_goal() {
+  base_two_goal(1);
 }
 
 
@@ -779,7 +809,7 @@ void measure_offsets() {
     double target = i % 2 == 0 ? 90 : 270;  // Switch the turn target every run from 270 to 90
 
     // Turn to target at half power
-    chassis.pid_turn_set(target, 63, ez::raw);
+    chassis.pid_turn_set(target, 63, ez::right_turn);
     chassis.pid_wait();
     pros::delay(250);
 

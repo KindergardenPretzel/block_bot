@@ -10,7 +10,6 @@ ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
     {-1, -2, -3},     // Left Chassis Ports (negative port will reverse it!)
     {4, 5, 6},  // Right Chassis Ports (negative port will reverse it!)
-
     14,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
     450);   // Wheel RPM = cartridge * (motor gear / wheel gear)
@@ -42,6 +41,8 @@ void initialize() {
 
   // Set the drive to your own constants from autons.cpp!
   default_constants();
+
+
 
   ez::as::auton_selector.autons_add({
     {"skills", skills},  
@@ -305,6 +306,7 @@ void opcontrol() {
     }
     if (master.get_digital_new_press(DIGITAL_UP))
     {
+      set_lift_constants(68);
       descore_on();
     }
 

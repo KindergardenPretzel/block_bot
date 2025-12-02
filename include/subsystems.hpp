@@ -57,6 +57,6 @@ inline bool lift_toggled = false;
 inline void descore_on()
 {
    descoringMech.set_value(HIGH);
-   liftPID.target_set(69);
+   liftPID.target_set(68);
    lift_toggled = true;
 }

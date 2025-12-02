@@ -1,7 +1,7 @@
 {
   "py/object": "pros.conductor.project.Project",
   "py/state": {
-    "project_name": "SKILLS",
+    "project_name": "block_bot",
     "target": "v5",
     "templates": {
       "EZ-Template": {
@@ -425,8 +425,8 @@
     },
     "upload_options": {
       "description": "2025",
-      "icon": "pizza",
-      "slot": 5
+      "icon": "X",
+      "slot": 1
     },
     "use_early_access": false
   }
