@@ -184,8 +184,7 @@ void base_two_goal(bool right=1) {
 
 /// ########################### AUTON RED RIGHT ################################
 void red_right_auton() {
-  //base(1);
-  base_two_goal(1);
+  base(1);
 }
 
 /// ########################### AUTON RED LEFT ################################
@@ -227,7 +226,7 @@ void skills() {
     //Turn to loader
     chassis.pid_turn_set(180_deg, TURN_SPEED);
     chassis.pid_wait();
-    //lower loader and spin intake
+    //lower loader tool and spin intake
     loader_toggle();
     intake_spin(127);
     pros::delay(200);
@@ -768,6 +767,152 @@ pros::delay(200);
 loader_toggle();
 }
 
+
+void skills_half() {
+     chassis.pid_angle_behavior_set(ez::shortest);
+    //Start
+    chassis.odom_xyt_set(0_in, 0_in, 90_deg);
+    chassis.pid_wait();
+    //drive to loader tile
+    chassis.pid_odom_set(28.5_in, DRIVE_SPEED, true);
+    chassis.pid_wait();
+    //Turn to loader
+    chassis.pid_turn_set(180_deg, TURN_SPEED);
+    chassis.pid_wait();
+    //lower loader and spin intake
+    loader_toggle();
+    intake_spin(127);
+    pros::delay(200);
+    //Approach loader
+    chassis.pid_odom_set(8_in, 70, true);
+    chassis.pid_wait();
+    //Intake blocks
+    pros::delay(1700);
+
+    
+  chassis.pid_odom_set({
+                        {{30_in, -7_in}, rev, 80},
+                        {{27_in, 5_in}, rev,  DRIVE_SPEED},
+                        {{17_in, 9_in}, rev, DRIVE_SPEED},
+                        {{6_in, 10_in}, rev, DRIVE_SPEED},
+                        {{-5_in, 10_in}, rev, DRIVE_SPEED},
+                        {{-21_in, 12_in}, rev, DRIVE_SPEED},
+                        {{-34_in, 14_in}, rev, DRIVE_SPEED},
+                        {{-48_in, 14_in}, rev, DRIVE_SPEED},
+                        {{-64.5_in, 14_in}, rev, 70},
+                      },false);
+
+  chassis.pid_wait_until_index(1);
+  intake_spin(0);
+  loader_toggle();
+  chassis.pid_wait_until_index(6);
+  //Raise lift
+  liftPID.target_set(90);
+  lift_toggled = true;
+  chassis.pid_wait();
+  //Turn to loader
+  chassis.pid_turn_set(0_deg, 80);
+  chassis.pid_wait();
+
+  chassis.pid_odom_set({
+                        {{-64_in, 25_in}, fwd, 60},},true);  
+  chassis.pid_wait();
+
+    intake_spin(-127);
+  //Stop intake
+    pros::delay(1800);
+    intake_spin(0);
+
+     chassis.pid_odom_set({
+                        {{-64_in, 10_in}, rev, 60},
+                        {{-64_in, -2_in}, rev,  90},
+                      },false);
+  chassis.pid_wait_until_index(0);
+  liftPID.target_set(0);
+  lift_toggled = true;
+  chassis.pid_wait_until_index(1);
+  loader_toggle();
+  chassis.pid_wait();
+
+
+
+  intake_spin(127);
+  chassis.pid_angle_behavior_set(ez::left_turn);
+
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_angle_behavior_set(ez::shortest);
+
+
+    //Approach loader
+    chassis.pid_odom_set(11_in, 90, true);
+    chassis.pid_wait();
+    //Intake blocks
+    pros::delay(1700);
+    //leave loader
+    chassis.pid_odom_set(-16_in, 90, true);
+    chassis.pid_wait();
+
+    // stop intake, toggle loader, lift up
+    intake_spin(0);
+    loader_toggle();
+
+    liftPID.target_set(90);
+    lift_toggled = true;
+
+    chassis.pid_angle_behavior_set(ez::left_turn);
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_angle_behavior_set(ez::shortest);
+
+  // go to the goal
+    chassis.pid_odom_set({{{-65_in, 25_in}, fwd, 60},},true);  
+  chassis.pid_wait();
+  // spin intake  
+  intake_spin(-127);
+
+  pros::delay(1800);
+  //Stop intake
+  intake_spin(0);
+
+
+  chassis.pid_odom_set({{{-61_in, 8_in}, rev, 40},},true);  
+  chassis.pid_wait();
+      //down lift
+     liftPID.target_set(0);
+     lift_toggled = true;
+
+  pros::delay(100);
+
+  chassis.pid_turn_set(135_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  pros::delay(100);
+
+  chassis.pid_odom_set({{{-50_in, -10_in}, fwd, DRIVE_SPEED},},true);  
+  chassis.pid_wait();
+
+  chassis.pid_swing_set(ez::RIGHT_SWING, 90_deg, SWING_SPEED, 0);
+  chassis.pid_wait();
+
+  pros::delay(100);
+
+  chassis.pid_turn_set(100_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  pros::delay(100);
+
+  chassis.pid_odom_set({{{-32.5_in, -14.5_in}, fwd, DRIVE_SPEED},},true);  
+  chassis.pid_wait();
+
+  loader_toggle();
+
+  pros::delay(100);
+
+  chassis.pid_odom_set({{{-13_in, -13_in}, fwd, 127},},true);  
+  chassis.pid_wait();
+  loader_toggle();
+}
 
 
 

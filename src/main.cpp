@@ -47,6 +47,7 @@ void initialize() {
   ez::as::auton_selector.autons_add({
     {"skills", skills},  
        {"skills OLD", skills_old},  
+       {"skills half", skills_half}, 
     {"red right", red_right_auton},
       {"red left", red_left_auton},
       {"blue right", blue_right_auton},
