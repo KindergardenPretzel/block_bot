@@ -174,12 +174,98 @@ void base_two_goal(bool right=1) {
   chassis.pid_wait();
   pros::delay(300);
   // take remaining under the goal
-  chassis.pid_swing_set(ez::RIGHT_SWING, 27_deg, 45, 5);
+  chassis.pid_swing_set(ez::RIGHT_SWING, 29_deg, 45, 5);
   chassis.pid_wait();
   pros::delay(250);
   chassis.pid_odom_set({{{16.5_in, 24_in}, rev, 60},},
                       true); 
+
+  chassis.pid_odom_set({{{12_in, 26_in}, rev, DRIVE_SPEED},},
+    true); 
+
+    liftPID.target_set(7);
+  lift_toggled = true; 
+  
+    chassis.pid_wait();
+
+    intake_spin(0);
+
+    chassis.pid_turn_set(317_deg, TURN_SPEED);
+    chassis.pid_wait();
    
+    chassis.pid_odom_set(11_in, 60, true);
+  chassis.pid_wait();
+
+  
+
+  intake_spin(-100);
+  pros::delay(520);
+
+  liftPID.target_set(0);
+  lift_toggled = true; 
+  intake_spin(0);
+
+  chassis.pid_odom_set({
+                        {{40.9_in, 10_in}, rev, DRIVE_SPEED},},
+                        true);
+
+    chassis.pid_wait();
+
+    chassis.pid_turn_set(0_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    liftPID.target_set(90);
+  lift_toggled = true; 
+  pros::delay(500);
+
+chassis.pid_odom_set({
+                         {{40.9_in, 16_in}, fwd, 60},
+                         {{40.9_in, 21.7_in}, fwd, 60}},
+                        true);
+
+  chassis.pid_wait();
+  //chassis.pid_odom_set({
+  //                      {{40_in, 21.7_in, 0_deg}, fwd, 45},}, true);
+  //chassis.pid_wait();
+  
+  //score!
+  intake_spin(-127);
+  pros::delay(1300);
+
+  chassis.pid_odom_set(-7_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  
+  intake_spin(0);
+  liftPID.target_set(0);
+  lift_toggled = true; 
+
+  chassis.pid_odom_set({
+                          {{41_in, 0_in}, rev, DRIVE_SPEED},},
+                         true);
+
+  chassis.pid_wait();
+  
+
+  pros::delay(100);
+
+  loader_toggle();
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  
+  intake_spin(127);
+  
+  chassis.pid_odom_set(13_in, 90, true);
+  chassis.pid_wait();
+  
+  // wait for balls and stop the intake
+  pros::delay(700);
+  intake_spin(0);
+
+  // drive backwards and get rid of balls that can block loader tool 
+  chassis.pid_odom_set(-7_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  loader_toggle();
 }
 
 /// ########################### AUTON RED RIGHT ################################

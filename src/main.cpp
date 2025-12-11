@@ -49,6 +49,7 @@ void initialize() {
        {"skills OLD", skills_old},  
        {"skills half", skills_half}, 
     {"red right", red_right_auton},
+    {"red right two goal", red_right_two_goal},
       {"red left", red_left_auton},
       {"blue right", blue_right_auton},
       {"blue left", blue_left_auton},            
