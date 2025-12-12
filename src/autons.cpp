@@ -159,7 +159,7 @@ void base(bool right=1) {
 }
 
 
-void base_two_goal(bool right=1) {
+void base_two_goal(bool right = 1, int liftpos = 7) {
 
   //start intake and go for 3 balls and "under the goal" balls
   intake_spin(127);
@@ -168,7 +168,7 @@ void base_two_goal(bool right=1) {
                         {{16.5_in, 24_in}, fwd, 60},//////this is the middle of the tile
                         {{24_in, 30.5_in}, fwd, 70},
                         {{30_in, 35.5_in}, fwd, 50},
-                        {{31_in, 36.5_in}, fwd, 40},},
+                        {{31.5_in, 36.5_in}, fwd, 40},},
                        true); 
                        
   chassis.pid_wait();
@@ -182,9 +182,6 @@ void base_two_goal(bool right=1) {
 
   chassis.pid_odom_set({{{12_in, 26_in}, rev, DRIVE_SPEED},},
     true); 
-
-    liftPID.target_set(7);
-  lift_toggled = true; 
   
     chassis.pid_wait();
 
@@ -192,6 +189,9 @@ void base_two_goal(bool right=1) {
 
     chassis.pid_turn_set(317_deg, TURN_SPEED);
     chassis.pid_wait();
+
+    liftPID.target_set(liftpos);
+  lift_toggled = true; 
    
     chassis.pid_odom_set(11_in, 60, true);
   chassis.pid_wait();
@@ -295,7 +295,26 @@ void blue_left_auton() {
 
 /// ########################### AUTON RED RIGHT TWO GOAL ################################
 void red_right_two_goal() {
-  base_two_goal(1);
+  base_two_goal(1,7);
+}
+
+/// ########################### AUTON RED LEFT TWO GOAL ################################
+void red_left_two_goal() {
+  chassis.odom_x_flip();
+  chassis.odom_theta_flip();
+  base_two_goal(1,54);
+}
+
+/// ########################### AUTON BLUE RIGHT TWO GOAL ################################
+void blue_right_two_goal() {
+  base_two_goal(1,7);
+}
+
+/// ########################### AUTON BLUE LEFT TWO GOAL ################################
+void blue_left_two_goal() {
+  chassis.odom_x_flip();
+  chassis.odom_theta_flip();
+  base_two_goal(1,54);
 }
 
 

@@ -3,6 +3,7 @@
 void default_constants();
 
 void base();
+void base_two_goal(bool right, int liftpos);
 void left_base();
 void skills();
 void skills2();
@@ -13,6 +14,9 @@ void red_left_auton();
 void blue_left_auton();
 void blue_right_auton();
 void red_right_two_goal();
+void blue_right_two_goal();
+void red_left_two_goal();
+void blue_left_two_goal();
 
 void drive_example();
 void turn_example();

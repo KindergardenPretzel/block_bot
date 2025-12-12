@@ -45,14 +45,17 @@ void initialize() {
 
 
   ez::as::auton_selector.autons_add({
-    {"skills", skills},  
-       {"skills OLD", skills_old},  
-       {"skills half", skills_half}, 
-    {"red right", red_right_auton},
-    {"red right two goal", red_right_two_goal},
+      {"skills", skills},  
+      {"skills OLD", skills_old},  
+      {"skills half", skills_half}, 
+      {"red right", red_right_auton},
+      {"red right two goal", red_right_two_goal},
       {"red left", red_left_auton},
+      {"red left two goal", red_left_two_goal},
       {"blue right", blue_right_auton},
-      {"blue left", blue_left_auton},            
+      {"blue right two goal", blue_right_two_goal},
+      {"blue left", blue_left_auton},      
+      {"blue left two goal", blue_left_two_goal},      
 
       //{"Drive\n\nDrive forward and come back", drive_example},
       //{"Turn\n\nTurn 3 times.", turn_example},
