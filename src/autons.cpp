@@ -158,7 +158,7 @@ void base(bool right=1) {
   lift_toggled = true; 
 }
 
-
+/*
 void base_two_goal(bool right = 1, int liftpos = 7) {
 
   //start intake and go for 3 balls and "under the goal" balls
@@ -267,6 +267,157 @@ chassis.pid_odom_set({
 
   loader_toggle();
 }
+*/
+
+void base_two_goal2(bool right=true) {
+
+  //start intake and go for 3 balls and "under the goal" balls
+  intake_spin(127);
+  chassis.pid_odom_set({{{3.5_in, 11.5_in}, fwd, 80},
+                        {{8_in, 19_in}, fwd, 70},
+                        {{16.5_in, 24_in}, fwd, 60},//////this is the middle of the tile
+                        {{24_in, 30.5_in}, fwd, 70},
+                        {{30_in, 35.5_in}, fwd, 50},
+                        {{31.5_in, 36.5_in}, fwd, 40},},
+                       true); 
+                       
+  chassis.pid_wait();
+
+
+  pros::delay(300);
+  // take remaining under the goal
+  chassis.pid_swing_set(ez::RIGHT_SWING, 29_deg, 45, 5);
+  chassis.pid_wait();
+  pros::delay(250);
+
+  
+  chassis.pid_odom_set({{{24_in, 33_in}, rev, DRIVE_SPEED},
+                        {{19_in, 32_in}, rev, DRIVE_SPEED},
+                        {{9.5_in, 29.8_in}, rev, DRIVE_SPEED},
+                        },true); 
+
+  chassis.pid_wait_until_index(1);
+  // if axis is flipped.
+  if (right == false ){
+      liftPID.target_set(60);
+        lift_toggled = true; 
+  }
+  else
+  {
+  liftPID.target_set(7);
+  lift_toggled = true; 
+  }
+    intake_spin(0);
+     
+  chassis.pid_wait();
+  
+
+  if (right == false) {
+  chassis.pid_turn_set({3_in, 36.5_in}, fwd, TURN_SPEED);
+  chassis.pid_wait();
+
+ chassis.pid_odom_set({{{3_in, 36.5_in}, fwd, DRIVE_SPEED},},
+                      true); 
+ chassis.pid_wait();
+    
+  }
+  else{
+
+  
+  chassis.pid_turn_set({3.5_in, 35.5_in}, fwd, TURN_SPEED);
+  chassis.pid_wait();
+
+ chassis.pid_odom_set({{{3.5_in, 35.5_in}, fwd, DRIVE_SPEED},},
+                      true); 
+ chassis.pid_wait();
+
+ }
+  intake_spin(-100);
+  pros::delay(470);
+  intake_spin(0);
+
+if (right == false ){
+  chassis.pid_odom_set({
+                        {{39.9_in, 10.5_in}, rev, DRIVE_SPEED},},
+                        true);
+
+    chassis.pid_wait();
+  }
+  else
+  {
+    chassis.pid_odom_set({
+                        {{40.9_in, 10.5_in}, rev, DRIVE_SPEED},},
+                        true);
+
+    chassis.pid_wait();  
+  }
+
+    chassis.pid_turn_set(0_deg, TURN_SPEED);
+    chassis.pid_wait();
+
+    liftPID.target_set(90);
+  lift_toggled = true; 
+  pros::delay(500);
+if (right == false ){
+
+chassis.pid_odom_set({
+                         {{39.9_in, 16_in}, fwd, 60},
+                         {{39.9_in, 21.7_in}, fwd, 60}},
+                        true);
+
+  chassis.pid_wait();
+}
+else
+{
+  chassis.pid_odom_set({
+                         {{40.9_in, 16_in}, fwd, 60},
+                         {{40.9_in, 21.7_in}, fwd, 60}},
+                        true);
+
+  chassis.pid_wait();
+}  
+  //score!
+  intake_spin(-127);
+  pros::delay(1300);
+
+  chassis.pid_odom_set(-7_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  
+  intake_spin(0);
+  liftPID.target_set(0);
+  lift_toggled = true; 
+
+  chassis.pid_odom_set({
+                          {{41_in, 0_in}, rev, DRIVE_SPEED},},
+                         true);
+
+  chassis.pid_wait();
+  
+
+  pros::delay(100);
+
+  loader_toggle();
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  
+  intake_spin(127);
+  
+  chassis.pid_odom_set(13_in, 90, true);
+  chassis.pid_wait();
+  
+  // wait for balls and stop the intake
+  pros::delay(700);
+  intake_spin(0);
+
+  // drive backwards and get rid of balls that can block loader tool 
+  chassis.pid_odom_set(-7_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  loader_toggle();
+
+}
+
+
 
 /// ########################### AUTON RED RIGHT ################################
 void red_right_auton() {
@@ -295,26 +446,30 @@ void blue_left_auton() {
 
 /// ########################### AUTON RED RIGHT TWO GOAL ################################
 void red_right_two_goal() {
-  base_two_goal(1,7);
+  base_two_goal2();
+  //base_two_goal(1,7);
 }
 
 /// ########################### AUTON RED LEFT TWO GOAL ################################
 void red_left_two_goal() {
   chassis.odom_x_flip();
   chassis.odom_theta_flip();
-  base_two_goal(1,54);
+  //base_two_goal(1,54);
+    base_two_goal2(false);
 }
 
 /// ########################### AUTON BLUE RIGHT TWO GOAL ################################
 void blue_right_two_goal() {
-  base_two_goal(1,7);
+  //base_two_goal(1,7);
+    base_two_goal2();
 }
 
 /// ########################### AUTON BLUE LEFT TWO GOAL ################################
 void blue_left_two_goal() {
   chassis.odom_x_flip();
   chassis.odom_theta_flip();
-  base_two_goal(1,54);
+  //base_two_goal(1,54);
+    base_two_goal2(false);
 }
 
 

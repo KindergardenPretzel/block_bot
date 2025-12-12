@@ -3,7 +3,9 @@
 void default_constants();
 
 void base();
-void base_two_goal(bool right, int liftpos);
+//void base_two_goal(bool right, int liftpos);
+void base_two_goal2(bool right);
+
 void left_base();
 void skills();
 void skills2();
