@@ -9,6 +9,7 @@ extern Drive chassis;
 inline pros::Motor motor_intake(-10, pros::v5::MotorGears::blue, pros::v5::MotorUnits::degrees);
 inline pros::ADIDigitalOut loader (1, LOW);
 inline pros::ADIDigitalOut descoringMech (2, LOW);
+inline pros::ADIDigitalOut flipper (3, LOW);
 
 inline void intake_spin(int speed)
 {
@@ -34,6 +35,20 @@ inline void loader_toggle()
   else{
     loader.set_value(LOW);
     load_toggle = false;
+  }
+}
+
+inline void flipper_toggle()
+{
+  static bool flip_toggle = false;
+  if(!flip_toggle){
+   flipper.set_value(HIGH);
+   
+   flip_toggle = true;
+  }
+  else{
+    flipper.set_value(LOW);
+    flip_toggle = false;
   }
 }
 
