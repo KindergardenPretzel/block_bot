@@ -325,6 +325,9 @@ void opcontrol() {
     if (master.get_digital_new_press(DIGITAL_Y)) {
       loader_toggle();
     }
+    if (master.get_digital_new_press(DIGITAL_B)) {
+      flipper_toggle();
+    }
 
     pros::delay(ez::util::DELAY_TIME);
   }
